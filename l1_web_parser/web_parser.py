@@ -44,13 +44,18 @@ def get_all_links(address: str, links_dict: dict, add_children_links: bool = Tru
         json.dump(links_dict, f, indent=4, ensure_ascii=False)
 
 
-site_address = "https://mail.ru/"
+site_address = "https://ixbt.com/"
 file_path = "mail_ru_links.json"
 result_dict = dict()
 get_all_links(site_address, result_dict, filename=file_path)
 
 for lnk in result_dict:
-    print(lnk)
     child_links = result_dict[lnk]
+    if not isinstance(child_links, dict):
+        print(lnk)
+        print(f"\t{child_links}")
+        continue
+
+    print(lnk)
     for child in child_links:
         print(f"\t{child}")
