@@ -22,7 +22,7 @@ class Player:
             raise TypeError("Wrong type, to set player name, name type must be str")
 
         self._name = name
-        print(f"Player name been updated from: {self._name} to: {name}")
+        print(f"Player name been updated")
 
     @property
     def card(self):
@@ -38,7 +38,7 @@ class Player:
             raise TypeError("Wrong type, to set player card, card type must be Card")
 
         self._card = card
-        print(f"Player card been updated from card with id: {self._card.id} to card with id: {card.id}")
+        print(f"Player card been updated")
 
     def cross_out_number(self, number):
         raise NotImplementedError
@@ -57,8 +57,8 @@ class User(Player):
         if number in self.card.numbers:
             correct_num = True
 
-        val = input("Cross out number in card? (y/n to answer):")
-        self.validate_input_val(val)
+        val = input("Cross out number in card? (y/n to answer): ")
+        val = self.validate_input_val(val)
 
         if val == "y":
             if correct_num:
@@ -78,15 +78,16 @@ class User(Player):
 
         possible_values = ["y", "n"]
         if val in possible_values:
-            return
+            return val
 
-        input_validated = False
-        while not input_validated:
-            val = input("Wrong input, enter 'y' to yes and cross out number in card or 'n' to no")
+        while True:
+            val = input("Wrong input, enter 'y' to yes and cross out number in card or 'n' to continue:")
             if val not in possible_values:
                 continue
-            input_validated = True
 
+            break
+
+        return val
 
 class Computer(Player):
     def cross_out_number(self, number):

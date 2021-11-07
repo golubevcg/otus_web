@@ -1,5 +1,6 @@
 import uuid
 import random
+import re
 
 class Card:
 
@@ -38,9 +39,9 @@ class Card:
         if not self.numbers or len(self.numbers) != 15:
             return
 
-        separator = "--------------------------\n"
+        separator = "--------------------------"
 
-        final_string = separator
+        final_string = f"{separator}\n"
         for i in range(3):
             start = 5 * i
             end = start + 5
@@ -54,14 +55,17 @@ class Card:
 
     @classmethod
     def convert_int_to_str_w_spaces_for_one_digit_int(cls, val: int):
-        if val >= 10:
+        regex = "[0-9]"
+        if not re.search(regex, str(val)):
+            return f" {str(val)}"
+        elif int(val) >= 10:
             return str(val)
         else:
             return f" {str(val)}"
 
     @staticmethod
-    def generate_card(self):
-        numbers_range = list(range(90))
+    def generate_card():
+        numbers_range = list(range(1,90))
         card_numbers = random.choices(numbers_range, k=15)
 
         try:
