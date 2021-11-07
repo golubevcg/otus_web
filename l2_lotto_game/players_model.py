@@ -38,7 +38,7 @@ class Player:
             raise TypeError("Wrong type, to set player card, card type must be Card")
 
         self._card = card
-        print(f"Player card been updated")
+        print(f"\nPlayer card been updated")
 
     def cross_out_number(self, number):
         raise NotImplementedError

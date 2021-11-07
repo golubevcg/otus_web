@@ -5,12 +5,9 @@ import re
 from players_model import User, Computer
 import time
 
-class LotoGame:
+class LottoGame:
 
     def __init__(self, players_list: list):
-        if len(players_list) != 2:
-            raise ValueError("Incorrect data, players list can only contain two players.")
-
         self._players_list = players_list
 
     @property
@@ -24,7 +21,7 @@ class LotoGame:
 
     def start_game(self):
 
-        print("Welcome to Amazing Loto Game!")
+        print("Welcome to Amazing Lotto Game!")
         print("Generating cards...")
         self.generate_cards()
 
@@ -42,15 +39,16 @@ class LotoGame:
         while numbers_queue and not game_over:
             current_keg = numbers_queue.pop()
             print(f"\n\n--------Current keg number:{current_keg}")
-            for player in self._players_list:
+
+            for player in self._players_list[:]:
                 print(f"\n\nPlayer {player.name} turn! Player card:\n{player.card}")
                 if not player.cross_out_number(current_keg):
-                    game_over = True
-                    curr_player_index = self._players_list.index(player)
-                    winner_player = self._players_list[curr_player_index-1]
                     print(f"\nThere is no such number in this card!")
-                    print(f"Game over! Player {winner_player.name} is winner!")
-                    break
+                    print(f"Player {player.name} lost!")
+                    self._players_list.remove(player)
+                    if len(self._players_list) == 1:
+                        game_over = True
+                        break
 
                 # case in which all card numbers is crossed
                 card_str = str(player.card)
@@ -58,6 +56,10 @@ class LotoGame:
                     game_over = True
                     print(f"Game over! Player {self._players_list[0].name} is winner!")
                     break
+
+            if len(self._players_list) == 1:
+                game_over = True
+                print(f"Game over! Player {self._players_list[0].name} is winner!")
 
     def generate_cards(self):
         if not self._players_list:
@@ -72,6 +74,8 @@ class LotoGame:
 
 
 player1 = User("user1")
-player2 = Computer("comp1")
-loto_game = LotoGame([player1, player2])
-loto_game.start_game()
+player2 = Computer("comp2")
+player3 = User("user3")
+
+lotto_game = LottoGame([player1, player2, player3])
+lotto_game.start_game()
