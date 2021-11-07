@@ -1,8 +1,14 @@
 import uuid
 from card_model import Card
-import random
+
 
 class Player:
+
+    """
+    Base class, from which all players will be inherited.
+    In child classes must be implemented cross_out_number or NotImplementedError will rise.
+    """
+
     def __init__(self, name):
         self._name = name
         self._id = uuid.uuid4()
@@ -30,10 +36,6 @@ class Player:
 
     @card.setter
     def card(self, card: Card):
-        """
-
-        :type card: object
-        """
         if type(card) != Card:
             raise TypeError("Wrong type, to set player card, card type must be Card")
 
@@ -48,7 +50,22 @@ class Player:
 
 
 class User(Player):
+
+    """
+    User player class
+    """
+
     def cross_out_number(self, number):
+
+        """
+        Based on player decision input, crosses number in user's card or skips.
+        If number in card, then it must be crossed,
+        if it is not in card - then it must be skipped, this two conditions will give both True,
+        False otherwise.
+        :param number: number to cross in card
+        :return: bool.
+        """
+
         if not number:
             print("Nothing to cross out, given number is empty.")
             return
@@ -73,6 +90,11 @@ class User(Player):
                 return True
 
     def validate_input_val(self, val: str):
+
+        """
+        Validates input given by user in infinite cycle, until proper input will be given.
+        """
+
         if not val:
             print("There was an error, nothing to validate, given string es empty.")
 
@@ -90,6 +112,11 @@ class User(Player):
         return val
 
 class Computer(Player):
+
+    """
+    Computer player class
+    """
+
     def cross_out_number(self, number):
         if not number:
             print("Nothing to cross out, given number is empty.")

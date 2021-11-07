@@ -7,7 +7,22 @@ import time
 
 class LottoGame:
 
+    """
+    Main class for LottoGame.
+    """
+
     def __init__(self, players_list: list):
+        if type(players_list) != list:
+            raise TypeError("Wrong type, to create LottoGame instance, provide list with players.")
+
+        for player in players_list:
+            if not isinstance(player, (User, Computer)):
+                raise TypeError("Wrong type, each player in list must be User, Computer or other class"
+                                " inherited from Player class.")
+                break
+
+        if len(players_list) < 2:
+            raise ValueError("Game can be played only with 2 players or more.")
         self._players_list = players_list
 
     @property
@@ -20,6 +35,10 @@ class LottoGame:
         self._players_list = players_list
 
     def start_game(self):
+
+        """
+        Main game function, which start game cycle.
+        """
 
         print("Welcome to Amazing Lotto Game!")
         print("Generating cards...")
@@ -62,6 +81,11 @@ class LottoGame:
                 print(f"Game over! Player {self._players_list[0].name} is winner!")
 
     def generate_cards(self):
+
+        """
+        Generates cards for each user
+        """
+
         if not self._players_list:
             raise ValueError("Error, cannot generate cards, players_list is empty")
 
@@ -73,9 +97,10 @@ class LottoGame:
                 print(f"\nPlayer {player.name} received this card:\n{card}")
 
 
-player1 = User("user1")
-player2 = Computer("comp2")
-player3 = User("user3")
+if __name__ == "__main__":
+    player1 = User("user1")
+    player2 = Computer("comp2")
+    player3 = User("user3")
 
-lotto_game = LottoGame([player1, player2, player3])
-lotto_game.start_game()
+    lotto_game = LottoGame([player1, player2, player3])
+    lotto_game.start_game()

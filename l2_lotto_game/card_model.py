@@ -4,6 +4,10 @@ import re
 
 class Card:
 
+    """
+    Base class for each LottoGame card data.
+    """
+
     def __init__(self, numbers: list):
         if len(numbers) != 15:
             raise Exception("Error, wrong numbers amount, it must be 15 numbers")
@@ -15,6 +19,11 @@ class Card:
         return self._id
 
     def cross_out_number(self, num: int):
+
+        """
+        Crosses out given number in card. If given num not in card numbers exception will be thrown.
+        :param num: number to cross in card
+        """
         if not num:
             raise Exception("Error, given number is empty.")
 
@@ -26,6 +35,12 @@ class Card:
         print("Number successfully was crossed!")
 
     def check_number_in_card(self, num) -> bool:
+
+        """
+        Checks if given number in numbers list
+        :param num: number to check value
+        :return: bool True if num in self.numbers, False otherwise
+        """
 
         if not num:
             raise Exception("Error, given number is empty.")
@@ -55,6 +70,14 @@ class Card:
 
     @classmethod
     def convert_int_to_str_w_spaces_for_one_digit_int(cls, val: int):
+
+        """
+        Converts given int to str, if int have only one digit,
+        additional space will be added in returned string before number.
+        :param val:
+        :return: str updated value
+        """
+
         regex = "[0-9]"
         if not re.search(regex, str(val)):
             return f" {str(val)}"
@@ -63,13 +86,18 @@ class Card:
         else:
             return f" {str(val)}"
 
-    @staticmethod
-    def generate_card():
-        numbers_range = list(range(1,90))
+    @classmethod
+    def generate_card(cls):
+
+        """
+        Static fabric method, which generate class instance with random numbers.
+        """
+
+        numbers_range = list(range(1, 90))
         card_numbers = random.choices(numbers_range, k=15)
 
         try:
-            card = Card(card_numbers)
+            card = cls(card_numbers)
             return card
         except Exception as e:
             print(e)
