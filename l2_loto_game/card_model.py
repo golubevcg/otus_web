@@ -1,11 +1,9 @@
 import uuid
-import player_main
-
+import random
 
 class Card:
 
-    def __init__(self, numbers: list, player: player_main.Player):
-        self._player = player
+    def __init__(self, numbers: list):
         if len(numbers) != 15:
             raise Exception("Error, wrong numbers amount, it must be 15 numbers")
         self._id = uuid.uuid4()
@@ -14,18 +12,6 @@ class Card:
     @property
     def id(self):
         return self._id
-
-    @property
-    def player(self):
-        return self._player
-
-    @player.setter
-    def player(self, player: player.Player):
-        if type(player) != player.Player:
-            raise TypeError("Wrong type, to set player, type must be Player")
-
-        self._player = player
-        print(f"In card ({str(self._id)}), player been updated from: {self._player} to: {player}")
 
     def cross_out_number(self, num: int):
         if not num:
@@ -58,7 +44,8 @@ class Card:
         for i in range(3):
             start = 5 * i
             end = start + 5
-            current_numbers_line = "    ".join(map(self.convert_int_to_str_w_spaces_for_one_digit_int, self.numbers[start:end]))
+            current_numbers_line = "    ".join(map(self.convert_int_to_str_w_spaces_for_one_digit_int,
+                                                   self.numbers[start:end]))
             final_string += f"{current_numbers_line}\n"
 
         final_string += separator
@@ -72,11 +59,14 @@ class Card:
         else:
             return f" {str(val)}"
 
+    @staticmethod
+    def generate_card(self):
+        numbers_range = list(range(90))
+        card_numbers = random.choices(numbers_range, k=15)
 
-test_player = player_main.Player("Vasya")
-test_card = Card(list(range(15)), test_player)
-print(test_card)
-print(test_card.player)
-test_player1 = player_main.Player("Alina")
-test_card.player = test_player1
-print(test_card)
+        try:
+            card = Card(card_numbers)
+            return card
+        except Exception as e:
+            print(e)
+            return None
