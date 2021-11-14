@@ -1,8 +1,8 @@
-from card_model import Card
+from l2_lotto_game.src.card_model import Card
 import random
 from collections import deque
 import re
-from players_model import User, Computer
+from l2_lotto_game.src.players_model import User, Computer
 import time
 
 class LottoGame:
@@ -12,6 +12,11 @@ class LottoGame:
     """
 
     def __init__(self, players_list: list):
+        if not players_list:
+            raise ValueError("Wrong value, given players list is empty. "
+                             "To create LottoGame instance, "
+                             "provide correct list with players.")
+
         if type(players_list) != list:
             raise TypeError("Wrong type, to create LottoGame instance, provide list with players.")
 
@@ -23,6 +28,8 @@ class LottoGame:
 
         if len(players_list) < 2:
             raise ValueError("Game can be played only with 2 players or more.")
+
+
         self._players_list = players_list
 
     @property
@@ -73,12 +80,14 @@ class LottoGame:
                 card_str = str(player.card)
                 if not re.search(digits_regex, card_str):
                     game_over = True
-                    print(f"Game over! Player {self._players_list[0].name} is winner!")
+                    print(f"Player {self._players_list[0].name} is winner!")
                     break
 
             if len(self._players_list) == 1:
                 game_over = True
-                print(f"Game over! Player {self._players_list[0].name} is winner!")
+                print(f"Player {self._players_list[0].name} is winner!")
+
+        print("Game Over!")
 
     def generate_cards(self):
 
