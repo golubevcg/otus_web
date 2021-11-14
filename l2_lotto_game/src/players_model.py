@@ -1,5 +1,5 @@
 import uuid
-from card_model import Card
+from l2_lotto_game.src.card_model import Card
 
 
 class Player:
@@ -10,8 +10,14 @@ class Player:
     """
 
     def __init__(self, name):
+        if not name:
+            raise ValueError("Empty name value error")
+
+        if type(name) != str:
+            raise TypeError("Wrong type, to set player name, name type must be str")
+
         self._name = name
-        self._id = uuid.uuid4()
+        self._id = str(uuid.uuid4())
         self._card = None
 
     @property
@@ -24,6 +30,9 @@ class Player:
 
     @name.setter
     def name(self, name: str):
+        if not name:
+            raise ValueError("Empty name value error")
+
         if type(name) != str:
             raise TypeError("Wrong type, to set player name, name type must be str")
 
@@ -36,6 +45,9 @@ class Player:
 
     @card.setter
     def card(self, card: Card):
+        if not card:
+            raise ValueError("Empty card value error")
+
         if type(card) != Card:
             raise TypeError("Wrong type, to set player card, card type must be Card")
 
@@ -46,7 +58,7 @@ class Player:
         raise NotImplementedError
 
     def __str__(self):
-        return f"{self._name}({str(self._id)})"
+        return f"{self._name}({self._id})"
 
 
 class User(Player):
@@ -67,8 +79,10 @@ class User(Player):
         """
 
         if not number:
-            print("Nothing to cross out, given number is empty.")
-            return
+            raise ValueError("Nothing to cross out, given number is empty.")
+
+        if not self.card:
+            raise ValueError("Cannot cross out number - card is not defined.")
 
         correct_num = False
         if number in self.card.numbers:
@@ -97,6 +111,7 @@ class User(Player):
 
         if not val:
             print("There was an error, nothing to validate, given string es empty.")
+            return val
 
         possible_values = ["y", "n"]
         if val in possible_values:
@@ -110,6 +125,7 @@ class User(Player):
             break
 
         return val
+
 
 class Computer(Player):
 
