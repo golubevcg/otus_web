@@ -80,7 +80,7 @@ def test_cross_out_exception(fixture_player_object):
     assert type(exc_data.value) == NotImplementedError
 
 
-def test_user_cross_out_number_wrong_args(fixture_user_object):
+def test_user_cross_out_number_wrong_args(fixture_user_object, fixture_card_object):
     with pytest.raises(ValueError) as exc_data:
         fixture_user_object.cross_out_number(None)
     assert str(exc_data.value) == "Nothing to cross out, given number is empty."
@@ -89,28 +89,59 @@ def test_user_cross_out_number_wrong_args(fixture_user_object):
         fixture_user_object.cross_out_number(1)
     assert str(exc_info.value) == "Cannot cross out number - card is not defined."
 
-
-@patch("players_model.User.validate_input_val")
-def test_user_cross_out_number_correct(mock_validate_input_val,
-                                       fixture_user_object,
-                                       fixture_card_object):
-
-    # MOCK INPUT
-    # MOCK VALIDATE INPUT
-    pass
+    fixture_user_object.card = fixture_card_object
+    with pytest.raises(TypeError) as exc_inf:
+        fixture_user_object.cross_out_number("1")
+    assert str(exc_inf.value) == "Error, number to cross must be int"
 
 
-def test_user_cross_out_number_wrong_input_value(fixture_user_object):
-    # MOCK INPUT
-    # MOCK VALIDATE INPUT
-    pass
+@patch("l2_lotto_game.src.players_model.User.validate_input_val", return_value="y")
+@patch("builtins.input", return_value="y")
+def test_user_cross_out_number_correct_y(validate_input_val_mock, input_val_mock,
+                                         fixture_user_object, fixture_card_object):
+    fixture_user_object.card = fixture_card_object
+    assert fixture_user_object.cross_out_number(1)
+    validate_input_val_mock.assert_called_once()
+    input_val_mock.assert_called_once()
 
 
-def test_user_validate_input_val(fixture_user_object):
-    # user validate input val
-    pass
+@patch("l2_lotto_game.src.players_model.User.validate_input_val", return_value="n")
+@patch("builtins.input", return_value="n")
+def test_user_cross_out_number_correct_n(validate_input_val_mock, input_val_mock,
+                                         fixture_user_object, fixture_card_object):
+    fixture_user_object.card = fixture_card_object
+    assert fixture_user_object.cross_out_number(25)
+    validate_input_val_mock.assert_called_once()
+    input_val_mock.assert_called_once()
 
 
-def test_computer_cross_out_number(fixture_user_object):
-    # compute cross out number
-    pass
+@patch("builtins.input", return_value="y")
+def test_user_validate_input_val_correct(input_mock, fixture_user_object):
+    assert "y" == fixture_user_object.validate_input_val("y")
+    assert "n" == fixture_user_object.validate_input_val("n")
+
+    input_mock.return_value = "n"
+    fixture_user_object.validate_input_val("test")
+    input_mock.assert_called_once()
+
+
+def test_user_validate_input_val_wrong(fixture_user_object):
+    with pytest.raises(ValueError) as val_err:
+        fixture_user_object.validate_input_val(None)
+    assert str(val_err.value) == "There was an error, nothing to validate, given string es empty."
+
+
+def test_computer_cross_out_number_correct(fixture_computer_object, fixture_card_object):
+    fixture_computer_object.card = fixture_card_object
+    assert fixture_computer_object.cross_out_number(1)
+
+
+def test_computer_cross_out_number_wrong(fixture_computer_object, fixture_card_object):
+    with pytest.raises(ValueError) as val_error:
+        fixture_computer_object.cross_out_number(1)
+    assert str(val_error.value) == "Card is empty, cannot cross out number."
+
+    fixture_computer_object.card = fixture_card_object
+    with pytest.raises(ValueError) as val_err:
+        fixture_computer_object.cross_out_number(None)
+    assert str(val_err.value) == "Nothing to cross out, given number is empty."

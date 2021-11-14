@@ -84,6 +84,9 @@ class User(Player):
         if not self.card:
             raise ValueError("Cannot cross out number - card is not defined.")
 
+        if type(number) != int:
+            raise TypeError("Error, number to cross must be int")
+
         correct_num = False
         if number in self.card.numbers:
             correct_num = True
@@ -110,8 +113,7 @@ class User(Player):
         """
 
         if not val:
-            print("There was an error, nothing to validate, given string es empty.")
-            return val
+            raise ValueError("There was an error, nothing to validate, given string es empty.")
 
         possible_values = ["y", "n"]
         if val in possible_values:
@@ -135,8 +137,10 @@ class Computer(Player):
 
     def cross_out_number(self, number):
         if not number:
-            print("Nothing to cross out, given number is empty.")
-            return
+            raise ValueError("Nothing to cross out, given number is empty.")
+
+        if not self.card:
+            raise ValueError("Card is empty, cannot cross out number.")
 
         if number in self.card.numbers:
             self.card.cross_out_number(number)
