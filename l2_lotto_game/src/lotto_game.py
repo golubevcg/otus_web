@@ -106,10 +106,3 @@ class LottoGame:
                 print(f"\nPlayer {player.name} received this card:\n{card}")
 
 
-if __name__ == "__main__":
-    player1 = User("user1")
-    player2 = Computer("comp2")
-    player3 = User("user3")
-
-    lotto_game = LottoGame([player1, player2, player3])
-    lotto_game.start_game()
