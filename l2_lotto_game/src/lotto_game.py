@@ -5,6 +5,7 @@ import re
 from l2_lotto_game.src.players_model import User, Computer
 import time
 
+
 class LottoGame:
 
     """
@@ -28,7 +29,6 @@ class LottoGame:
 
         if len(players_list) < 2:
             raise ValueError("Game can be played only with 2 players or more.")
-
 
         self._players_list = players_list
 
